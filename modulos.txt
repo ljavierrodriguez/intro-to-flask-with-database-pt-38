@@ -5,8 +5,10 @@ flask-migrate
 python-dotenv
 
 Base de Datos
-
 SQLite
+
+Postgresql 
+psycopg2-binary
 
 Instalar Modulos
 pipenv install flask flask-sqlalchemy flask-cors flask-migrate python-dotenv
