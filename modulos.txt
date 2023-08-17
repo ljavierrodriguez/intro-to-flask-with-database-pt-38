@@ -1,0 +1,18 @@
+flask
+flask-sqlalchemy
+flask-cors 
+flask-migrate
+python-dotenv
+
+Base de Datos
+
+SQLite
+
+Instalar Modulos
+pipenv install flask flask-sqlalchemy flask-cors flask-migrate python-dotenv
+
+
+habilitar el comando flask
+
+SET FLASK_APP=app.py
+export FLASK_APP=app.py
