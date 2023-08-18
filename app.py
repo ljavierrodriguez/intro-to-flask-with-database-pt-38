@@ -28,6 +28,32 @@ def listar_todos():
     todos = list(map(lambda task: task.serialize(), todos))
     return jsonify(todos), 200
 
+@app.route('/todos/<int:id>', methods=['GET'])
+def get_task_by_id(id):
+    
+    task = Task.query.get(id)
+    
+    if not task:
+        return jsonify({ "message": "Task not found!"}), 404
+    
+    return jsonify(task.serialize()), 200
+
+@app.route('/todos/search', methods=['GET'])
+def search_task():
+    
+    s = request.args.get('s')
+    
+    #todos = Task.query.filter_by(done=s).all()
+    # todos = Task.query.filter(Task.id.in_([1, 2, 5, 10])).all()
+    # todos = Task.query.filter(Task.id > 1000).all()
+    # todos = Task.query.filter_by(done=False).all()
+
+    todos = Task.query.filter(Task.label.ilike(f"%{s}%")).all()
+    todos = list(map(lambda task: task.serialize(), todos))
+    
+    return jsonify(todos), 200
+    
+
 @app.route('/todos', methods=['POST'])
 def crear_task():
     body = request.get_json()
@@ -43,6 +69,37 @@ def crear_task():
     
     return jsonify(task.serialize()), 201
 
+@app.route('/todos/<int:id>', methods=['PUT'])
+def update_task(id):
+    body = request.get_json()
+    
+    task = Task.query.get(id)
+    
+    if not task:
+        return jsonify({ "message": "Task not found!"}), 404
+    
+    task.label = body["label"]
+    
+    if 'done' in body:
+        task.done = body["done"]
+    
+    db.session.commit()
+    
+    return jsonify(task.serialize()), 200
+
+@app.route('/todos/<int:id>', methods=['DELETE'])
+def delete_task(id):
+    
+    task = Task.query.get(id)
+    
+    if not task:
+        return jsonify({ "message": "Task not found!"}), 404
+    
+    db.session.delete(task)
+    db.session.commit()
+    
+    return jsonify({ "message": "Task deleted successfully"}), 200
+    
 
 if __name__ == '__main__':
     app.run()
