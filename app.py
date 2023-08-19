@@ -64,8 +64,11 @@ def crear_task():
     if 'done' in body:
         task.done = body["done"]
     
+    """ 
     db.session.add(task)
-    db.session.commit()
+    db.session.commit() 
+    """
+    task.save()
     
     return jsonify(task.serialize()), 201
 
